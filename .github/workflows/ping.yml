@@ -1,17 +1,29 @@
-name: Keep Backend Awake
+name: Keep Backends Awake
 
 on:
   schedule:
-    # Runs every 5 minutes
-    - cron: "*/5 * * * *"
+    - cron: "*/5 * * * *"  # Every 5 minutes
+  workflow_dispatch:
 
 jobs:
-  ping-backend:
+  ping-backends:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Curl your backend to keep it alive
+      - name: 🔁 Ping all backend services
         run: |
-          curl -s -X POST https://rag.surajv.me/ask \
-          -H "Content-Type: application/json" \
-          -d '{"question": "ping"}'
+          echo "Pinging sketchkaro backend..."
+          curl -s https://sketchkaro.onrender.com > /dev/null
+
+          echo "Pinging sketchkaro WebSocket backend..."
+          curl -s "https://sketchkaro-ws.onrender.com?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZDQ0NDdmZi01N2EyLTQ0OTktYWM0Zi1iMWZiMmZlNDQ1MGMiLCJpYXQiOjE3NTAwMTE3OTh9.U2tIFd7jSNyREvkeOJeHhej3Iq9CjL-8gm6qgl_BJwE" > /dev/null
+
+          echo "Pinging test-app backend..."
+          curl -s https://test-app-latest-34lq.onrender.com > /dev/null
+
+          echo "Pinging RAG backend..."
+          curl -s -X POST https://ragv2.surajv.me/ask \
+            -H "Content-Type: application/json" \
+            -d '{"question": "ping"}' > /dev/null
+
+          echo "✅ All backends pinged successfully."

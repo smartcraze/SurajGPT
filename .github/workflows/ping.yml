@@ -1,0 +1,17 @@
+name: Keep Backend Awake
+
+on:
+  schedule:
+    # Runs every 5 minutes
+    - cron: "*/5 * * * *"
+
+jobs:
+  ping-backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Curl your backend to keep it alive
+        run: |
+          curl -s -X POST https://rag.surajv.me/ask \
+          -H "Content-Type: application/json" \
+          -d '{"question": "ping"}'
